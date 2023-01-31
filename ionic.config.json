@@ -1,0 +1,7 @@
+{
+  "name": "prueba_frontend",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
