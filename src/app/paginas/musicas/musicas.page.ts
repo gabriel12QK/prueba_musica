@@ -1,0 +1,66 @@
+import { Component, OnInit } from '@angular/core';
+import { AlertController, ToastController } from '@ionic/angular';
+import { MusicaService } from 'src/app/service/musica.service';
+
+@Component({
+  selector: 'app-musicas',
+  templateUrl: './musicas.page.html',
+  styleUrls: ['./musicas.page.scss'],
+})
+export class MusicasPage implements OnInit {
+  musicas:any
+  idMusica:any
+  constructor(
+    private musicaService:MusicaService,
+    private alertCtrl:AlertController,
+    private toastController:ToastController
+
+  ) { }
+
+  ngOnInit() {
+    this.obtnermusica()
+  }
+
+  obtnermusica(){
+    this.musicaService.mostrarMusica().subscribe({
+      next:(res)=>{
+        this.musicas=res
+      }
+    })
+  }
+
+  eliminarCancion(id:any){
+    this.idMusica=id
+    this.musicaService.deleteMusica(id).subscribe({
+      next:(res)=>{
+        console.log(res);
+        this.obtnermusica();
+        //this.musicas=this.musicas.filter((e:any)=>e.estado=1)
+        this.toastAlert("cancion eliminada con exito")
+      }
+    })
+  }
+  async alert(message: string) {
+    const alert = await this.alertCtrl.create({
+      cssClass: 'modal-delete',
+      header: message,
+      buttons: [
+        {
+          text: 'Ok',
+          id: 'confirm-button',
+        },
+      ],
+    });
+    alert.present();
+  }
+
+    async toastAlert(message: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2000
+    });
+    toast.present();
+  }
+
+
+}
